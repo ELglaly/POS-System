@@ -1,0 +1,83 @@
+/*
+ * barcode.css — Screen 5: Barcode Management
+ * Screen-specific overrides and components.
+ * Imports (and thus depends on) global.css, which is declared in the FXML stylesheets list.
+ */
+
+/* ══ Panel containers ══════════════════════════════════════════════════════ */
+.form-panel {
+    -fx-background-color: -pos-bg-surface;
+    -fx-border-color: transparent -pos-border-subtle transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.preview-panel {
+    -fx-background-color: -pos-bg-deep;
+}
+
+/* ══ BarcodeWidget ═════════════════════════════════════════════════════════ */
+.barcode-widget {
+    -fx-background-color: -pos-bg-surface;
+    -fx-background-radius: 12;
+    -fx-border-color: -pos-border-subtle;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 16, 0, 0, 4);
+}
+
+.barcode-image {
+    /* Image background to contrast with white barcode images */
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0, 0, 1);
+}
+
+.barcode-product-name {
+    -fx-font-size: -pos-text-base;
+    -fx-font-weight: 700;
+    -fx-text-fill: -pos-text-primary;
+    -fx-text-overrun: ELLIPSIS;
+}
+
+.barcode-price {
+    -fx-font-size: -pos-text-lg;
+    -fx-font-weight: 700;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-text-fill: -pos-accent-primary;
+}
+
+.barcode-value-label {
+    -fx-font-size: -pos-text-sm;
+    -fx-font-family: 'JetBrains Mono', monospace;
+    -fx-text-fill: -pos-text-secondary;
+}
+
+.barcode-action-print    { -fx-text-fill: -pos-accent-primary; }
+.barcode-action-download { -fx-text-fill: -pos-accent-secondary; }
+.barcode-action-copy     { -fx-text-fill: -pos-text-secondary; }
+
+/* ══ Live preview image ════════════════════════════════════════════════════ */
+.live-preview-image {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 2);
+}
+
+/* ══ Print history table overrides ════════════════════════════════════════ */
+.history-table-wrapper {
+    -fx-background-color: -pos-bg-surface;
+    -fx-background-radius: 8;
+    -fx-border-color: -pos-border-subtle;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+/* ══ Scan success / failure flash overlays ════════════════════════════════
+   Applied programmatically via Timeline to a transparent Rectangle overlay.
+   Defined here so the controller can add/remove the style class.           */
+.scan-flash-success {
+    -fx-fill: rgba(0, 200, 150, 0.1);
+}
+.scan-flash-failure {
+    -fx-fill: rgba(255, 77, 79, 0.1);
+}

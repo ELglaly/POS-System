@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.cashier.ui.controller.CheckoutController"
+      prefWidth="500" prefHeight="580" spacing="14"
+      style="-fx-background-color: #f0f2f5; -fx-padding: 24;">
+
+    <Label text="CHECKOUT"
+           style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+    <Separator/>
+
+    <TableView fx:id="summaryTable" prefHeight="180"
+               style="-fx-background-color: white; -fx-border-color: #e0e0e0;">
+        <columns>
+            <TableColumn fx:id="colItem"     text="Item"     prefWidth="220"/>
+            <TableColumn fx:id="colQtySum"   text="Qty"      prefWidth="60"/>
+            <TableColumn fx:id="colSumTotal" text="Subtotal" prefWidth="110"/>
+        </columns>
+    </TableView>
+
+    <!-- Totals -->
+    <VBox spacing="0"
+          style="-fx-background-color: white; -fx-padding: 14; -fx-background-radius: 8;
+                 -fx-border-color: #e0e0e0; -fx-border-radius: 8;">
+        <GridPane hgap="12" vgap="8">
+            <columnConstraints>
+                <ColumnConstraints minWidth="110"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            <Label text="Subtotal:"  GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   style="-fx-text-fill: #6c757d;"/>
+            <Label fx:id="lblSubtotal" text="\$0.00"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"
+                   style="-fx-text-fill: #1a1a2e; -fx-font-size: 15;"/>
+            <Label text="Discount:"  GridPane.rowIndex="1" GridPane.columnIndex="0"
+                   style="-fx-text-fill: #6c757d;"/>
+            <Label fx:id="lblDiscount" text="\$0.00"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"
+                   style="-fx-text-fill: #c62828;"/>
+            <Label text="TOTAL:"     GridPane.rowIndex="2" GridPane.columnIndex="0"
+                   style="-fx-text-fill: #1a1a2e; -fx-font-weight: bold; -fx-font-size: 16;"/>
+            <Label fx:id="lblTotal"  text="\$0.00"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"
+                   style="-fx-text-fill: #2e7d32; -fx-font-size: 22; -fx-font-weight: bold;"/>
+        </GridPane>
+    </VBox>
+    <Separator/>
+
+    <!-- Payment method -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Payment Method:" style="-fx-text-fill: #1a1a2e; -fx-font-weight: bold;"/>
+        <RadioButton fx:id="rbCash" text="Cash" selected="true"
+                     style="-fx-text-fill: #1a1a2e;">
+            <toggleGroup><ToggleGroup fx:id="paymentGroup"/></toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="rbCard" text="Card" toggleGroup="$paymentGroup"
+                     style="-fx-text-fill: #1a1a2e;"/>
+    </HBox>
+
+    <!-- Cash tendered -->
+    <HBox fx:id="cashBox" spacing="12" alignment="CENTER_LEFT">
+        <Label text="Amount Tendered:" style="-fx-text-fill: #1a1a2e;"/>
+        <TextField fx:id="amountField" promptText="0.00" prefWidth="130"
+                   onKeyReleased="#onAmountChanged"
+                   style="-fx-font-size: 16; -fx-pref-height: 38;
+                          -fx-border-color: #1565c0; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+        <Label text="Change:" style="-fx-text-fill: #1a1a2e;"/>
+        <Label fx:id="lblChange" text="\$0.00"
+               style="-fx-text-fill: #2e7d32; -fx-font-size: 18; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Button text="Cancel"    onAction="#onCancel"  prefWidth="110" prefHeight="42"
+                style="-fx-background-color: #757575; -fx-text-fill: white;
+                       -fx-background-radius: 5; -fx-cursor: hand;"/>
+        <Button text="✓ Confirm" onAction="#onConfirm" prefWidth="160" prefHeight="42"
+                style="-fx-background-color: #2e7d32; -fx-text-fill: white;
+                       -fx-font-weight: bold; -fx-font-size: 15;
+                       -fx-background-radius: 5; -fx-cursor: hand;"/>
+    </HBox>
+</VBox>

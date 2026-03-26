@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.cashier.ui.controller.ProductManagerController"
+            prefWidth="1100" prefHeight="720"
+            style="-fx-background-color: #f0f2f5;">
+
+    <top>
+        <HBox spacing="12" alignment="CENTER_LEFT"
+              style="-fx-background-color: #1565c0; -fx-padding: 10 16 10 16;">
+            <Button text="← Back" onAction="#onBack"
+                    style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-cursor: hand;"/>
+            <Label text="Product Manager"
+                   style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Search by name or SKU..."
+                       prefWidth="280" onAction="#onSearch"
+                       style="-fx-background-color: white;
+                              -fx-border-radius: 5; -fx-background-radius: 5; -fx-padding: 6 10;"/>
+            <Button text="Search" onAction="#onSearch"
+                    style="-fx-background-color: #0d47a1; -fx-text-fill: white;
+                           -fx-background-radius: 5; -fx-cursor: hand;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="14">
+            <padding><Insets top="14" bottom="14" left="14" right="14"/></padding>
+
+            <!-- Product table -->
+            <TableView fx:id="productTable" HBox.hgrow="ALWAYS"
+                       style="-fx-background-color: white; -fx-border-color: #e0e0e0;
+                              -fx-background-radius: 8; -fx-border-radius: 8;">
+                <columns>
+                    <TableColumn fx:id="colCode"      text="SKU"    prefWidth="130"/>
+                    <TableColumn fx:id="colProdName"  text="Name"   prefWidth="200"/>
+                    <TableColumn fx:id="colProdPrice" text="Price"  prefWidth="90"/>
+                    <TableColumn fx:id="colProdStock" text="Stock"  prefWidth="80"/>
+                </columns>
+                <placeholder>
+                    <Label text="No products found" style="-fx-text-fill: #9e9e9e;"/>
+                </placeholder>
+            </TableView>
+
+            <!-- Form panel -->
+            <VBox spacing="10" prefWidth="330"
+                  style="-fx-background-color: white; -fx-background-radius: 8;
+                         -fx-border-color: #e0e0e0; -fx-border-radius: 8;
+                         -fx-padding: 18;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+                <Label text="Edit / Add Product"
+                       style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #1a1a2e;"/>
+                <Separator/>
+
+                <Label text="SKU (auto-generated)" style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                <TextField fx:id="fldCode"
+                           style="-fx-background-color: #f5f5f5;
+                                  -fx-border-color: #e0e0e0; -fx-border-radius: 4; -fx-background-radius: 4;
+                                  -fx-pref-height: 34;"/>
+
+                <Label text="Name *" style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                <TextField fx:id="fldName"
+                           style="-fx-border-color: #ced4da; -fx-border-radius: 4; -fx-background-radius: 4;
+                                  -fx-pref-height: 34;"/>
+
+                <Label text="Price *" style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                <TextField fx:id="fldPrice" promptText="0.00"
+                           style="-fx-border-color: #ced4da; -fx-border-radius: 4; -fx-background-radius: 4;
+                                  -fx-pref-height: 34;"/>
+
+                <Label text="Stock *" style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                <TextField fx:id="fldStock" promptText="0"
+                           style="-fx-border-color: #ced4da; -fx-border-radius: 4; -fx-background-radius: 4;
+                                  -fx-pref-height: 34;"/>
+
+                <Label text="Description" style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                <TextArea fx:id="fldDesc" prefHeight="64"
+                          style="-fx-border-color: #ced4da; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+
+                <Separator/>
+
+                <!-- Barcode label preview (CODE128 + name + SKU + price) -->
+                <Label text="Barcode Label Preview:"
+                       style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                <VBox alignment="CENTER"
+                      style="-fx-background-color: white; -fx-border-color: #e0e0e0;
+                             -fx-border-radius: 4; -fx-padding: 6;">
+                    <ImageView fx:id="barcodePreview"
+                               fitWidth="290" fitHeight="120" preserveRatio="true"/>
+                </VBox>
+                <Button text="Print Barcode Label" onAction="#onPrintBarcode"
+                        maxWidth="Infinity" prefHeight="34"
+                        style="-fx-background-color: #1565c0; -fx-text-fill: white;
+                               -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"/>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <HBox spacing="8">
+                    <Button text="New"    onAction="#onAdd"    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                            prefHeight="36"
+                            style="-fx-background-color: #f5f5f5; -fx-text-fill: #1a1a2e;
+                                   -fx-border-color: #bdbdbd; -fx-background-radius: 5; -fx-cursor: hand;"/>
+                    <Button text="Save"   onAction="#onSave"   HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                            prefHeight="36"
+                            style="-fx-background-color: #2e7d32; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"/>
+                    <Button text="Delete" onAction="#onDelete" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                            prefHeight="36"
+                            style="-fx-background-color: #c62828; -fx-text-fill: white;
+                                   -fx-background-radius: 5; -fx-cursor: hand;"/>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

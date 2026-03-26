@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.cashier.ui.controller.MainCashierController"
+            prefWidth="1280" prefHeight="720"
+            style="-fx-background-color: #f0f2f5;">
+
+    <!-- ── TOP BAR ── -->
+    <top>
+        <HBox spacing="12" alignment="CENTER_LEFT"
+              style="-fx-background-color: #1565c0; -fx-padding: 10 16 10 16;">
+            <Label text="CASHIER POS"
+                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblOperator" text="Operator: —"
+                   style="-fx-text-fill: #bbdefb; -fx-font-size: 13;"/>
+            <Button fx:id="btnProductManager" text="Products" onAction="#onProductManager"
+                    style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-cursor: hand;"/>
+            <Button fx:id="btnReports"  text="Reports" onAction="#onReports"
+                    style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-cursor: hand;"/>
+            <Button fx:id="btnUserManager" text="Users" onAction="#onUserManager"
+                    style="-fx-background-color: #6a1b9a; -fx-text-fill: white; -fx-cursor: hand;"/>
+            <Button text="Logout" onAction="#onLogout"
+                    style="-fx-background-color: #c62828; -fx-text-fill: white; -fx-cursor: hand;"/>
+        </HBox>
+    </top>
+
+    <!-- ── MAIN CONTENT ── -->
+    <center>
+        <HBox spacing="12">
+            <padding><Insets top="14" bottom="14" left="14" right="14"/></padding>
+
+            <!-- LEFT: Scan + product details -->
+            <VBox spacing="10" prefWidth="320"
+                  style="-fx-background-color: white; -fx-background-radius: 8;
+                         -fx-border-color: #e0e0e0; -fx-border-radius: 8;
+                         -fx-padding: 16;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+
+                <!-- Scan section -->
+                <Label text="Barcode / SKU Lookup"
+                       style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #1a1a2e;"/>
+                <VBox spacing="4">
+                    <Label text="Scan barcode or type SKU + Enter:"
+                           style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                    <TextField fx:id="barcodeField"
+                               promptText="Barcode / SKU"
+                               onAction="#onBarcodeEntered"
+                               style="-fx-pref-height: 38; -fx-font-size: 14;
+                                      -fx-border-color: #1565c0; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                    <Label fx:id="lastScannedLabel" text="Last scanned: —"
+                           style="-fx-text-fill: #1565c0; -fx-font-size: 12;"/>
+                </VBox>
+
+                <!-- Search section -->
+                <VBox spacing="4">
+                    <Label text="Search by name:"
+                           style="-fx-text-fill: #6c757d; -fx-font-size: 11;"/>
+                    <HBox spacing="6">
+                        <TextField fx:id="searchField" promptText="Product name..."
+                                   onAction="#onSearch"
+                                   HBox.hgrow="ALWAYS"
+                                   style="-fx-pref-height: 34;
+                                          -fx-border-color: #ced4da; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+                        <Button text="Search" onAction="#onSearch"
+                                prefHeight="34"
+                                style="-fx-background-color: #1565c0; -fx-text-fill: white;
+                                       -fx-background-radius: 5; -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Product details -->
+                <Label text="Product Details"
+                       style="-fx-font-weight: bold; -fx-font-size: 13; -fx-text-fill: #1a1a2e;"/>
+                <GridPane hgap="8" vgap="6">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="60" prefWidth="70"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    <Label text="Name:"  GridPane.rowIndex="0" GridPane.columnIndex="0"
+                           style="-fx-text-fill: #6c757d;"/>
+                    <Label fx:id="lblProductName" text="—"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"
+                           style="-fx-text-fill: #1a1a2e; -fx-font-weight: bold;"/>
+                    <Label text="SKU:"   GridPane.rowIndex="1" GridPane.columnIndex="0"
+                           style="-fx-text-fill: #6c757d;"/>
+                    <Label fx:id="lblProductCode" text="—"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1"
+                           style="-fx-text-fill: #1a1a2e;"/>
+                    <Label text="Price:" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                           style="-fx-text-fill: #6c757d;"/>
+                    <Label fx:id="lblProductPrice" text="—"
+                           GridPane.rowIndex="2" GridPane.columnIndex="1"
+                           style="-fx-text-fill: #2e7d32; -fx-font-weight: bold; -fx-font-size: 14;"/>
+                    <Label text="Stock:" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                           style="-fx-text-fill: #6c757d;"/>
+                    <Label fx:id="lblProductStock" text="—"
+                           GridPane.rowIndex="3" GridPane.columnIndex="1"
+                           style="-fx-text-fill: #1a1a2e;"/>
+                </GridPane>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Qty:" style="-fx-text-fill: #1a1a2e;"/>
+                    <Spinner fx:id="qtySpinner" min="1" max="9999" initialValue="1"
+                             prefWidth="80"/>
+                </HBox>
+                <Button text="+ Add to Cart" onAction="#onManualAdd"
+                        maxWidth="Infinity"
+                        style="-fx-background-color: #1565c0; -fx-text-fill: white;
+                               -fx-font-weight: bold; -fx-pref-height: 38;
+                               -fx-background-radius: 5; -fx-cursor: hand; -fx-font-size: 13;"/>
+            </VBox>
+
+            <!-- RIGHT: Cart -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 8;
+                         -fx-border-color: #e0e0e0; -fx-border-radius: 8;
+                         -fx-padding: 16;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+                <Label text="Shopping Cart"
+                       style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #1a1a2e;"/>
+                <TableView fx:id="cartTable" VBox.vgrow="ALWAYS"
+                           style="-fx-background-color: white; -fx-border-color: #e0e0e0;">
+                    <columns>
+                        <TableColumn fx:id="colName"     text="Product"  prefWidth="240"/>
+                        <TableColumn fx:id="colQty"      text="Qty"      prefWidth="60"/>
+                        <TableColumn fx:id="colPrice"    text="Unit"     prefWidth="90"/>
+                        <TableColumn fx:id="colSubtotal" text="Subtotal" prefWidth="100"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Cart is empty — scan or search a product"
+                               style="-fx-text-fill: #9e9e9e;"/>
+                    </placeholder>
+                </TableView>
+                <HBox spacing="8">
+                    <Button text="Remove Selected" onAction="#onRemoveItem"
+                            style="-fx-background-color: #ef5350; -fx-text-fill: white;
+                                   -fx-background-radius: 5; -fx-cursor: hand;"/>
+                    <Button text="Clear Cart" onAction="#onClearCart"
+                            style="-fx-background-color: #757575; -fx-text-fill: white;
+                                   -fx-background-radius: 5; -fx-cursor: hand;"/>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- ── BOTTOM BAR: Totals + Checkout ── -->
+    <bottom>
+        <HBox spacing="20" alignment="CENTER_RIGHT"
+              style="-fx-background-color: white; -fx-padding: 14 20 14 20;
+                     -fx-border-color: #e0e0e0 transparent transparent transparent; -fx-border-width: 1;">
+            <Label text="Discount %:" style="-fx-text-fill: #6c757d;"/>
+            <TextField fx:id="discountField" promptText="0" prefWidth="70"
+                       onAction="#onDiscountChanged"
+                       style="-fx-border-color: #ced4da; -fx-border-radius: 4; -fx-background-radius: 4;"/>
+            <Label text="Subtotal:" style="-fx-text-fill: #6c757d;"/>
+            <Label fx:id="lblSubtotal" text="\$0.00"
+                   style="-fx-text-fill: #1a1a2e; -fx-font-size: 14;"/>
+            <Label text="Discount:" style="-fx-text-fill: #6c757d;"/>
+            <Label fx:id="lblDiscount" text="\$0.00"
+                   style="-fx-text-fill: #c62828; -fx-font-size: 14;"/>
+            <Label text="TOTAL:" style="-fx-text-fill: #1a1a2e; -fx-font-weight: bold; -fx-font-size: 16;"/>
+            <Label fx:id="lblTotal" text="\$0.00"
+                   style="-fx-text-fill: #2e7d32; -fx-font-size: 22; -fx-font-weight: bold;"/>
+            <Button text="CHECKOUT" onAction="#onCheckout"
+                    prefWidth="160" prefHeight="50"
+                    style="-fx-background-color: #2e7d32; -fx-text-fill: white;
+                           -fx-font-size: 16; -fx-font-weight: bold;
+                           -fx-background-radius: 8; -fx-cursor: hand;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

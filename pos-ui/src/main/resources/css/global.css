@@ -1,0 +1,337 @@
+/*
+ * POS Pro — Global Design System
+ * All colours, typography, spacing, and component base styles defined here.
+ * Individual screen stylesheets import this file and add screen-specific overrides.
+ *
+ * Colour naming convention: -pos-{category}-{variant}
+ * Never hardcode hex values outside this file.
+ */
+
+/* ── @font-face declarations ───────────────────────────────────────────────
+   Fonts bundled in pos-ui/src/main/resources/fonts/
+   JetBrains Mono  : numbers, prices, IDs, barcodes
+   IBM Plex Sans   : body text, labels
+*/
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/JetBrainsMono-Regular.ttf');
+    -fx-font-style: normal;
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/JetBrainsMono-Bold.ttf');
+    -fx-font-style: normal;
+    -fx-font-weight: bold;
+}
+@font-face {
+    font-family: 'IBM Plex Sans';
+    src: url('../fonts/IBMPlexSans-Regular.ttf');
+    -fx-font-style: normal;
+}
+@font-face {
+    font-family: 'IBM Plex Sans';
+    src: url('../fonts/IBMPlexSans-Bold.ttf');
+    -fx-font-style: normal;
+    -fx-font-weight: bold;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES (JavaFX uses -fx- prefixed lookup references)
+   ══════════════════════════════════════════════════════════════════════════ */
+.root {
+    /* ── Base Palette ─────────────────────────────────────────────────── */
+    -pos-bg-deep:           #0D0F14;
+    -pos-bg-surface:        #161A23;
+    -pos-bg-elevated:       #1E2330;
+    -pos-bg-hover:          #252B3B;
+
+    /* ── Brand Accent ─────────────────────────────────────────────────── */
+    -pos-accent-primary:    #00C896;
+    -pos-accent-secondary:  #3D8EFF;
+    -pos-accent-glow:       rgba(0, 200, 150, 0.15);
+
+    /* ── Semantic Colours ─────────────────────────────────────────────── */
+    -pos-success:           #00C896;
+    -pos-warning:           #FFB020;
+    -pos-danger:            #FF4D4F;
+    -pos-info:              #3D8EFF;
+
+    /* ── Text Hierarchy ───────────────────────────────────────────────── */
+    -pos-text-primary:      #F0F2F8;
+    -pos-text-secondary:    #8892A4;
+    -pos-text-muted:        #4A5568;
+    -pos-text-inverse:      #0D0F14;
+
+    /* ── Borders ──────────────────────────────────────────────────────── */
+    -pos-border-subtle:     rgba(255, 255, 255, 0.06);
+    -pos-border-strong:     rgba(255, 255, 255, 0.12);
+    -pos-border-accent:     rgba(0, 200, 150, 0.4);
+
+    /* ── Typography Scale ─────────────────────────────────────────────── */
+    -pos-text-xs:    11px;
+    -pos-text-sm:    13px;
+    -pos-text-base:  15px;
+    -pos-text-lg:    18px;
+    -pos-text-xl:    22px;
+    -pos-text-2xl:   28px;
+    -pos-text-3xl:   36px;
+    -pos-text-hero:  48px;
+
+    /* ── Root defaults ────────────────────────────────────────────────── */
+    -fx-background-color: -pos-bg-deep;
+    -fx-font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+    -fx-font-size:   -pos-text-base;
+    -fx-text-fill:   -pos-text-primary;
+}
+
+/* ── Screen container ──────────────────────────────────────────────────── */
+.pos-screen {
+    -fx-background-color: -pos-bg-deep;
+}
+
+/* ── Screen header bar ─────────────────────────────────────────────────── */
+.screen-header {
+    -fx-background-color: -pos-bg-surface;
+    -fx-border-color: transparent transparent -pos-border-subtle transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.screen-title {
+    -fx-font-size: -pos-text-xl;
+    -fx-font-weight: 700;
+    -fx-text-fill: -pos-text-primary;
+}
+
+/* ── Section titles ────────────────────────────────────────────────────── */
+.panel-section-title {
+    -fx-font-size: -pos-text-base;
+    -fx-font-weight: 700;
+    -fx-text-fill: -pos-text-secondary;
+    -fx-text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Field labels ──────────────────────────────────────────────────────── */
+.field-label {
+    -fx-font-size: -pos-text-sm;
+    -fx-font-weight: 600;
+    -fx-text-fill: -pos-text-secondary;
+}
+
+/* ══ PosButton variants ════════════════════════════════════════════════════ */
+
+.pos-button-primary {
+    -fx-background-color: -pos-accent-primary;
+    -fx-text-fill: -pos-text-inverse;
+    -fx-font-size: -pos-text-base;
+    -fx-font-weight: 700;
+    -fx-background-radius: 8;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-min-height: 44px;
+    -fx-padding: 0 20 0 20;
+}
+.pos-button-primary:hover {
+    -fx-background-color: derive(-pos-accent-primary, 10%);
+    -fx-effect: dropshadow(gaussian, -pos-accent-glow, 12, 0, 0, 0);
+}
+.pos-button-primary:pressed {
+    -fx-background-color: derive(-pos-accent-primary, -5%);
+}
+.pos-button-primary:disabled {
+    -fx-opacity: 0.4;
+    -fx-cursor: default;
+}
+
+.pos-button-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -pos-text-primary;
+    -fx-font-size: -pos-text-base;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8;
+    -fx-border-color: -pos-border-strong;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-min-height: 44px;
+    -fx-padding: 0 20 0 20;
+}
+.pos-button-secondary:hover {
+    -fx-background-color: -pos-bg-hover;
+}
+
+.pos-button-danger {
+    -fx-background-color: -pos-danger;
+    -fx-text-fill: white;
+    -fx-font-size: -pos-text-base;
+    -fx-font-weight: 700;
+    -fx-background-radius: 8;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-min-height: 44px;
+    -fx-padding: 0 20 0 20;
+}
+.pos-button-danger:hover {
+    -fx-background-color: derive(-pos-danger, 10%);
+}
+
+.pos-button-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: -pos-text-secondary;
+    -fx-font-size: -pos-text-sm;
+    -fx-font-weight: 500;
+    -fx-background-radius: 8;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-min-height: 36px;
+    -fx-padding: 0 14 0 14;
+}
+.pos-button-ghost:hover {
+    -fx-text-fill: -pos-text-primary;
+    -fx-background-color: -pos-bg-hover;
+}
+
+/* ══ PosTextField ══════════════════════════════════════════════════════════ */
+.pos-text-field {
+    -fx-background-color: -pos-bg-elevated;
+    -fx-border-color: -pos-border-subtle;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: -pos-text-primary;
+    -fx-prompt-text-fill: -pos-text-muted;
+    -fx-font-size: -pos-text-base;
+    -fx-min-height: 44px;
+    -fx-padding: 0 14 0 14;
+}
+.pos-text-field:focused {
+    -fx-border-color: -pos-accent-primary;
+    -fx-effect: dropshadow(gaussian, -pos-accent-glow, 8, 0, 0, 0);
+}
+
+/* Scan input variant: left border accent indicates barcode capture field */
+.scan-input {
+    -fx-border-color: -pos-accent-secondary -pos-border-subtle -pos-border-subtle -pos-border-subtle;
+    -fx-border-width: 0 0 0 3;
+    -fx-padding: 0 14 0 14;
+}
+.scan-input:focused {
+    -fx-border-color: -pos-accent-secondary;
+}
+
+/* ══ ComboBox ══════════════════════════════════════════════════════════════ */
+.pos-combo {
+    -fx-background-color: -pos-bg-elevated;
+    -fx-border-color: -pos-border-subtle;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-min-height: 44px;
+}
+.pos-combo .list-cell {
+    -fx-background-color: -pos-bg-elevated;
+    -fx-text-fill: -pos-text-primary;
+}
+.pos-combo .list-view {
+    -fx-background-color: -pos-bg-elevated;
+    -fx-border-color: -pos-border-strong;
+}
+.pos-combo:focused {
+    -fx-border-color: -pos-accent-primary;
+}
+
+/* ══ Spinner ═══════════════════════════════════════════════════════════════ */
+.pos-spinner {
+    -fx-background-color: -pos-bg-elevated;
+    -fx-border-color: -pos-border-subtle;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-min-height: 44px;
+}
+.pos-spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: -pos-text-primary;
+    -fx-font-family: 'JetBrains Mono', monospace;
+}
+
+/* ══ TableView ═════════════════════════════════════════════════════════════ */
+.pos-table {
+    -fx-background-color: transparent;
+    -fx-table-cell-border-color: -pos-border-subtle;
+}
+.pos-table .column-header-background {
+    -fx-background-color: -pos-bg-elevated;
+}
+.pos-table .column-header .label {
+    -fx-text-fill: -pos-text-secondary;
+    -fx-font-weight: 700;
+    -fx-font-size: -pos-text-sm;
+}
+.pos-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -pos-border-subtle transparent;
+}
+.pos-table .table-row-cell:hover {
+    -fx-background-color: -pos-bg-hover;
+}
+.pos-table .table-row-cell:selected {
+    -fx-background-color: -pos-accent-glow;
+}
+.pos-table .table-cell {
+    -fx-text-fill: -pos-text-primary;
+    -fx-font-size: -pos-text-sm;
+}
+.pos-table .table-row-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* ══ Status label ══════════════════════════════════════════════════════════ */
+.status-label { -fx-font-size: -pos-text-sm; -fx-text-fill: -pos-text-secondary; }
+.status-ok    { -fx-text-fill: -pos-success; }
+.status-error { -fx-text-fill: -pos-danger; }
+
+.status-completed { -fx-text-fill: -pos-success; -fx-font-weight: 700; }
+.status-failed    { -fx-text-fill: -pos-danger;  -fx-font-weight: 700; }
+
+/* ══ Separator ═════════════════════════════════════════════════════════════ */
+.separator .line       { -fx-border-color: -pos-border-subtle; -fx-border-width: 1 0 0 0; }
+.panel-divider .line   { -fx-border-color: -pos-border-subtle; -fx-border-width: 0 0 0 1; }
+
+/* ══ ProgressIndicator ═════════════════════════════════════════════════════ */
+.progress-indicator .indicator { -fx-background-color: transparent; }
+.progress-indicator .progress  { -fx-background-color: -pos-accent-primary; }
+
+/* ══ ScrollBar ═════════════════════════════════════════════════════════════ */
+.scroll-bar { -fx-background-color: transparent; }
+.scroll-bar .thumb {
+    -fx-background-color: -pos-border-strong;
+    -fx-background-radius: 4;
+}
+.scroll-bar .thumb:hover { -fx-background-color: -pos-text-muted; }
+.scroll-bar .track { -fx-background-color: transparent; }
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button { -fx-opacity: 0; -fx-pref-width: 0; -fx-pref-height: 0; }
+
+/* ══ ToggleButton (type pills) ═════════════════════════════════════════════ */
+.type-toggle {
+    -fx-background-color: -pos-bg-elevated;
+    -fx-text-fill: -pos-text-secondary;
+    -fx-font-size: -pos-text-sm;
+    -fx-font-weight: 600;
+    -fx-background-radius: 6;
+    -fx-border-color: -pos-border-subtle;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-min-height: 36px;
+    -fx-padding: 0 16 0 16;
+    -fx-cursor: hand;
+}
+.type-toggle:hover {
+    -fx-background-color: -pos-bg-hover;
+    -fx-text-fill: -pos-text-primary;
+}
+.type-toggle:selected {
+    -fx-background-color: -pos-accent-glow;
+    -fx-text-fill: -pos-accent-primary;
+    -fx-border-color: -pos-border-accent;
+}
