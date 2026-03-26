@@ -11,7 +11,7 @@ import org.example.cashier.core.entity.Product;
 import org.example.cashier.core.enums.UserRole;
 import org.example.cashier.core.model.CartItem;
 import org.example.cashier.services.CartService;
-import org.example.cashier.services.CashierProductService;
+import org.example.cashier.services.ProductService;
 import org.example.cashier.ui.AlertHelper;
 import org.example.cashier.ui.SessionState;
 import org.example.cashier.ui.StageManager;
@@ -58,7 +58,7 @@ public class MainCashierController implements Initializable {
     @FXML private Label  lblOperator;
 
     // ── Spring-injected services ───────────────────────────────────────────
-    private final CashierProductService productService;
+    private final ProductService productService;
     private final CartService           cartService;
     private final StageManager          stageManager;
     private final SessionState          sessionState;
@@ -101,14 +101,18 @@ public class MainCashierController implements Initializable {
         }
     }
 
+    private void displayProduct(Product p) {
+        selectedProduct = p;
+        lblProductName.setText(p.getName());
+        lblProductCode.setText(p.getSku());
+        lblProductPrice.setText(CurrencyFormatter.format(p.getPrice()));
+        lblProductStock.setText(String.valueOf(p.getStockQuantity()));
+    }
+
     private boolean lookupAndDisplayProduct(String code) {
         Optional<Product> opt = productService.findBySku(code);
         if (opt.isPresent()) {
-            selectedProduct = opt.get();
-            lblProductName.setText(selectedProduct.getName());
-            lblProductCode.setText(selectedProduct.getSku());
-            lblProductPrice.setText(CurrencyFormatter.format(selectedProduct.getPrice()));
-            lblProductStock.setText(String.valueOf(selectedProduct.getStockQuantity()));
+            displayProduct(opt.get());
             return true;
         } else {
             selectedProduct = null;
@@ -165,24 +169,13 @@ public class MainCashierController implements Initializable {
         if (results.isEmpty()) {
             AlertHelper.showWarning("Not Found", "No products match: " + query);
         } else if (results.size() == 1) {
-            selectedProduct = results.get(0);
-            lblProductName.setText(selectedProduct.getName());
-            lblProductCode.setText(selectedProduct.getSku());
-            lblProductPrice.setText(CurrencyFormatter.format(selectedProduct.getPrice()));
-            lblProductStock.setText(String.valueOf(selectedProduct.getStockQuantity()));
+            displayProduct(results.get(0));
         } else {
-            // Show a choice dialog for multiple matches
             ChoiceDialog<Product> dialog = new ChoiceDialog<>(results.get(0), results);
             dialog.setTitle("Select Product");
             dialog.setHeaderText("Multiple products found:");
             dialog.setContentText("Choose:");
-            dialog.showAndWait().ifPresent(p -> {
-                selectedProduct = p;
-                lblProductName.setText(p.getName());
-                lblProductCode.setText(p.getSku());
-                lblProductPrice.setText(CurrencyFormatter.format(p.getPrice()));
-                lblProductStock.setText(String.valueOf(p.getStockQuantity()));
-            });
+            dialog.showAndWait().ifPresent(this::displayProduct);
         }
         searchField.clear();
     }

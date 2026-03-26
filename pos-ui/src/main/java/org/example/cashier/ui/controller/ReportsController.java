@@ -8,8 +8,8 @@ import javafx.scene.control.*;
 import lombok.RequiredArgsConstructor;
 import org.example.cashier.core.entity.Transaction;
 import org.example.cashier.core.entity.TransactionItem;
-import org.example.cashier.services.CashierReportService;
-import org.example.cashier.services.CashierReportService.RangeSummary;
+import org.example.cashier.services.ReportService;
+import org.example.cashier.services.ReportService.RangeSummary;
 import org.example.cashier.ui.AlertHelper;
 import org.example.cashier.ui.StageManager;
 import org.example.cashier.ui.util.CurrencyFormatter;
@@ -69,7 +69,7 @@ public class ReportsController implements Initializable {
     @FXML private Label lblCardCount;
     @FXML private Label lblCardTotal;
 
-    private final CashierReportService reportService;
+    private final ReportService reportService;
     private final StageManager         stageManager;
 
     @Override

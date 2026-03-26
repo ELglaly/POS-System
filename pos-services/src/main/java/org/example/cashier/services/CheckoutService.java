@@ -1,75 +1,27 @@
 package org.example.cashier.services;
 
-import lombok.RequiredArgsConstructor;
-import org.example.cashier.core.entity.Product;
 import org.example.cashier.core.entity.Transaction;
-import org.example.cashier.core.entity.TransactionItem;
 import org.example.cashier.core.entity.User;
-import org.example.cashier.core.model.CartItem;
-import org.example.cashier.data.repository.ProductRepository;
-import org.example.cashier.data.repository.TransactionRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
-@Service
-@RequiredArgsConstructor
-public class CheckoutService {
+/**
+ * Executes the checkout process: validates the cart, deducts stock,
+ * persists the transaction, and clears the cart.
+ */
+public interface CheckoutService {
 
-    private final CartService           cartService;
-    private final TransactionRepository transactionRepository;
-    private final ProductRepository     productRepository;
-
-    @Transactional
-    public Transaction checkout(User cashier,
-                                Transaction.PaymentMethod paymentMethod,
-                                BigDecimal amountTendered) {
-
-        if (cartService.isEmpty()) {
-            throw new IllegalStateException("Cart is empty.");
-        }
-
-        BigDecimal total = cartService.getTotal();
-
-        if (paymentMethod == Transaction.PaymentMethod.CASH) {
-            if (amountTendered == null || amountTendered.compareTo(total) < 0) {
-                throw new IllegalArgumentException(
-                        "Amount tendered (" + amountTendered +
-                        ") is less than total (" + total + ").");
-            }
-        }
-
-        Transaction sale = new Transaction();
-        sale.setCashier(cashier);
-        sale.setSubtotal(cartService.getSubtotal());
-        sale.setDiscountAmount(cartService.getDiscountAmount());
-        sale.setTotal(total);
-        sale.setPaymentMethod(paymentMethod);
-        sale.setAmountTendered(amountTendered);
-        sale.setChangeGiven(
-                paymentMethod == Transaction.PaymentMethod.CASH
-                        ? amountTendered.subtract(total)
-                        : BigDecimal.ZERO);
-
-        for (CartItem cartItem : cartService.getItems()) {
-            Product product = productRepository.findById(cartItem.getProduct().getId())
-                    .orElseThrow(() -> new IllegalStateException(
-                            "Product not found: " + cartItem.getProduct().getName()));
-
-            if (product.getStockQuantity() < cartItem.getQuantity()) {
-                throw new IllegalStateException(
-                        "Insufficient stock for \"" + product.getName() +
-                        "\" (available: " + product.getStockQuantity() + ").");
-            }
-
-            product.setStockQuantity(product.getStockQuantity() - cartItem.getQuantity());
-            productRepository.save(product);
-            sale.addItem(new TransactionItem(product, cartItem.getQuantity()));
-        }
-
-        Transaction saved = transactionRepository.save(sale);
-        cartService.clear();
-        return saved;
-    }
+    /**
+     * Complete the sale for the current cart.
+     *
+     * @param cashier         the logged-in operator
+     * @param paymentMethod   CASH or CARD
+     * @param amountTendered  cash handed over (required for CASH, ignored for CARD)
+     * @return the persisted {@link Transaction}
+     * @throws IllegalStateException     if the cart is empty or stock is insufficient
+     * @throws IllegalArgumentException  if cash tendered is less than the total
+     */
+    Transaction checkout(User cashier,
+                         Transaction.PaymentMethod paymentMethod,
+                         BigDecimal amountTendered);
 }

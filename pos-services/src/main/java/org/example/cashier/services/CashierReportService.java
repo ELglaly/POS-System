@@ -13,12 +13,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CashierReportService {
+public class CashierReportService implements ReportService {
 
     private final TransactionRepository transactionRepository;
 
     // ── Basic ──────────────────────────────────────────────────────────────
 
+    @Override
     public BigDecimal getDailyTotal(LocalDate date) {
         BigDecimal result = transactionRepository.getDailyTotal(
                 date.atStartOfDay(),
@@ -26,18 +27,21 @@ public class CashierReportService {
         return result != null ? result : BigDecimal.ZERO;
     }
 
+    @Override
     public List<Transaction> getHistory(LocalDate from, LocalDate to) {
         return transactionRepository.findByDateRange(
                 from.atStartOfDay(),
                 to.plusDays(1).atStartOfDay());
     }
 
+    @Override
     public List<Object[]> getTopProducts(int limit) {
         return transactionRepository.findTopProducts(PageRequest.of(0, limit));
     }
 
     // ── Analytics ──────────────────────────────────────────────────────────
 
+    @Override
     public RangeSummary getRangeSummary(LocalDate from, LocalDate to) {
         var start = from.atStartOfDay();
         var end   = to.plusDays(1).atStartOfDay();
@@ -58,6 +62,7 @@ public class CashierReportService {
         return new RangeSummary(revenue, txCount, avg, itemsSold, discount);
     }
 
+    @Override
     public List<Object[]> getTopProductsByRevenue(int limit, LocalDate from, LocalDate to) {
         return transactionRepository.findTopProductsByRevenue(
                 from.atStartOfDay(),
@@ -65,19 +70,11 @@ public class CashierReportService {
                 PageRequest.of(0, limit));
     }
 
+    @Override
     public List<Object[]> getPaymentBreakdown(LocalDate from, LocalDate to) {
         return transactionRepository.getPaymentBreakdown(
                 from.atStartOfDay(),
                 to.plusDays(1).atStartOfDay());
     }
 
-    // ── DTO ────────────────────────────────────────────────────────────────
-
-    public record RangeSummary(
-            BigDecimal totalRevenue,
-            long       txCount,
-            BigDecimal avgOrderValue,
-            long       itemsSold,
-            BigDecimal totalDiscount
-    ) {}
 }

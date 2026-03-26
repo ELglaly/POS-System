@@ -11,7 +11,7 @@ import javafx.scene.image.ImageView;
 import lombok.RequiredArgsConstructor;
 import org.example.cashier.core.entity.Product;
 import org.example.cashier.core.enums.UserRole;
-import org.example.cashier.services.CashierProductService;
+import org.example.cashier.services.ProductService;
 import org.example.cashier.ui.AlertHelper;
 import org.example.cashier.ui.SessionState;
 import org.example.cashier.ui.StageManager;
@@ -44,7 +44,7 @@ public class ProductManagerController implements Initializable {
     @FXML private TextField  fldStock;
     @FXML private TextArea   fldDesc;
 
-    private final CashierProductService productService;
+    private final ProductService productService;
     private final StageManager          stageManager;
     private final SessionState          sessionState;
 

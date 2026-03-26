@@ -56,7 +56,7 @@ public class CheckoutController implements Initializable {
         rbCash.selectedProperty().addListener((obs, old, val) -> {
             cashBox.setVisible(val);
             cashBox.setManaged(val);
-            lblChange.setText("$0.00");
+            lblChange.setText(CurrencyFormatter.format(BigDecimal.ZERO));
         });
     }
 

@@ -85,13 +85,6 @@ public class BarcodeGenerationServiceImpl implements BarcodeGenerationService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Optional<BarcodeDTO> findByValue(String barcodeValue) {
-        return barcodeRepository.findByBarcodeValueAndActiveTrue(barcodeValue)
-                .map(barcodeMapper::toDto);
-    }
-
-    @Override
     public byte[] renderImagePng(String barcodeValue, BarcodeType type, int widthPx, int heightPx) {
         return barcodeEngine.generatePng(barcodeValue, type, widthPx, heightPx);
     }

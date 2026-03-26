@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CashierProductService {
+public class CashierProductService implements ProductService {
 
     private final ProductRepository productRepository;
     private final ZXingBarcodeEngine barcodeEngine;
