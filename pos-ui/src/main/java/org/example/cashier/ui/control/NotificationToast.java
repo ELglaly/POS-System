@@ -14,16 +14,6 @@ import javafx.util.Duration;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-/**
- * Slide-in toast notification shown bottom-right.
- * Supports SUCCESS, ERROR, WARNING, INFO variants with coloured left borders.
- * Auto-dismisses after 3 seconds with a fade-out.  Queues overflow beyond 3.
- *
- * Usage (always call from JavaFX thread):
- * <pre>
- *   NotificationToast.show(ownerWindow, Type.SUCCESS, "Saved", "Barcode saved successfully");
- * </pre>
- */
 public class NotificationToast extends StackPane {
 
     public enum Type {
@@ -48,16 +38,6 @@ public class NotificationToast extends StackPane {
     private static final Deque<Popup> visibleToasts = new ArrayDeque<>();
     /** Queued toasts waiting for a slot. */
     private static final Deque<Runnable> pendingQueue = new ArrayDeque<>();
-
-    // ── Static factory ────────────────────────────────────────────────────────
-
-    public static void show(Window owner, Type type, String title, String subtitle) {
-        if (visibleToasts.size() >= MAX_VISIBLE) {
-            pendingQueue.add(() -> show(owner, type, title, subtitle));
-            return;
-        }
-        createAndShow(owner, type, title, subtitle);
-    }
 
     // ── Construction ──────────────────────────────────────────────────────────
 

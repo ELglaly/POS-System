@@ -12,10 +12,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-/**
- * In-memory cart state — singleton per application session.
- * The ObservableList means any bound TableView refreshes automatically.
- */
 @Service
 public class CartService {
 
@@ -58,17 +54,9 @@ public class CartService {
         items.clear();
     }
 
-    // ── Discount ───────────────────────────────────────────────────────────
-
     public void setDiscountStrategy(DiscountStrategy strategy) {
         this.discountStrategy = strategy;
     }
-
-    public void clearDiscount() {
-        this.discountStrategy = new NoDiscount();
-    }
-
-    // ── Queries ────────────────────────────────────────────────────────────
 
     public ObservableList<CartItem> getItems() { return items; }
 

@@ -16,11 +16,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Path;
 
-/**
- * Exports barcode labels to PDF using iText 7 (AGPL).
- * Each label is rendered on its own page sized to match the {@link LabelTemplate} dimensions.
- * Useful for printing via standard printers or archiving label sheets.
- */
 @Component
 @Slf4j
 public class PdfLabelExporter {
@@ -66,8 +61,6 @@ public class PdfLabelExporter {
 
         return outputPath;
     }
-
-    // ── Private ───────────────────────────────────────────────────────────────
 
     private void renderLabel(Document document,
                              byte[] imagePng,

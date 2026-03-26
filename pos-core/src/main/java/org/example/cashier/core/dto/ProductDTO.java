@@ -5,10 +5,6 @@ import org.example.cashier.core.entity.Product;
 
 import java.math.BigDecimal;
 
-/**
- * Lightweight product projection used in barcode generation and UI autocomplete.
- * Only carries fields needed for barcode label rendering — not the full entity.
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

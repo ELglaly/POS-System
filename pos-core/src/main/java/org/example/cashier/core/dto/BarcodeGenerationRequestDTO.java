@@ -6,10 +6,7 @@ import org.example.cashier.core.constants.BarcodeConstants;
 import org.example.cashier.core.enums.BarcodeType;
 import org.example.cashier.core.enums.LabelTemplate;
 
-/**
- * Inbound request DTO for the barcode generation service.
- * Created by {@code BarcodeController} from the UI form values.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,22 +28,11 @@ public class BarcodeGenerationRequestDTO {
          message = "Cannot exceed " + BarcodeConstants.MAX_COPIES_PER_JOB + " copies per job")
     @Builder.Default
     private int copies = 1;
-
-    /**
-     * Optional custom text to overlay on the label (e.g. expiry date, lot number).
-     * Null or blank = no overlay.
-     */
     @Size(max = 40)
     private String customOverlayText;
-
-    /** Username of the operator submitting the request. */
     @NotBlank(message = "Operator username is required")
     private String operatorUsername;
 
-    /**
-     * When true, any existing active barcode of the same type for this product
-     * is deactivated before generating the new one.
-     */
     @Builder.Default
     private boolean deactivatePrevious = true;
 }

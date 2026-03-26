@@ -5,8 +5,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.oned.EAN13Writer;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cashier.core.constants.BarcodeConstants;
 import org.example.cashier.core.enums.BarcodeType;
@@ -21,18 +19,12 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 
-/**
- * ZXing-backed barcode image generation engine.
- * Supports CODE128 and EAN-13. Output is raw PNG bytes.
- * Thread-safe — this class is stateless.
- */
+
 @Component
 @Slf4j
 public class ZXingBarcodeEngine {
 
-    /**
-     * Render a barcode as raw PNG bytes.
-     */
+
     public byte[] generatePng(String value, BarcodeType type, int widthPx, int heightPx) {
         try {
             BitMatrix matrix = encode(value, type, widthPx, heightPx);
@@ -44,17 +36,6 @@ public class ZXingBarcodeEngine {
                     "Failed to generate " + type + " barcode for value: " + value, ex);
         }
     }
-
-    /**
-     * Render a product label: CODE128 barcode + name + SKU text + price below the bars.
-     * Used in the Product Manager preview and for printing.
-     *
-     * Layout (top → bottom):
-     *   [CODE128 barcode]
-     *   Product Name
-     *   SKU: P-XXXXXX
-     *   $Price
-     */
     public byte[] generateProductLabel(String sku, String productName) {
         try {
             int width  = 400;
@@ -104,15 +85,7 @@ public class ZXingBarcodeEngine {
         }
     }
 
-    /**
-     * Render a staff badge label: CODE128 barcode of the barcodePin + user's name below.
-     * Used in the User Manager preview and for printing staff badges.
-     *
-     * Layout (top → bottom):
-     *   [CODE128 barcode]
-     *   Full Name (or username)
-     *   PIN: XXXXXXXXXXXX
-     */
+
     public byte[] generateUserBarcodeLabel(String barcodePin, String displayName) {
         try {
             int width  = 400;
@@ -156,63 +129,6 @@ public class ZXingBarcodeEngine {
         } catch (WriterException | IOException ex) {
             throw new BarcodeGenerationException(
                     "Failed to generate user badge label for: " + displayName, ex);
-        }
-    }
-
-    /**
-     * Render a barcode with product name and price caption below the bars.
-     * Used for label preview in the UI.
-     */
-    public byte[] generatePngWithCaption(String value, BarcodeType type,
-                                          int widthPx, int heightPx,
-                                          String productName, String priceLabel) {
-        try {
-            BitMatrix matrix = encode(value, type, widthPx, heightPx);
-            BufferedImage barcodeImg = MatrixToImageWriter.toBufferedImage(matrix);
-
-            int captionHeight = 40;
-            int totalHeight = barcodeImg.getHeight() + captionHeight;
-            BufferedImage composite = new BufferedImage(
-                    barcodeImg.getWidth(), totalHeight, BufferedImage.TYPE_INT_RGB);
-
-            Graphics2D g = composite.createGraphics();
-            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                               RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, composite.getWidth(), composite.getHeight());
-            g.drawImage(barcodeImg, 0, 0, null);
-
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("SansSerif", Font.BOLD, 13));
-            FontMetrics fm = g.getFontMetrics();
-            String name = truncate(productName, 28);
-            int nameX = (composite.getWidth() - fm.stringWidth(name)) / 2;
-            g.drawString(name, nameX, barcodeImg.getHeight() + 16);
-
-            g.setFont(new Font("Monospaced", Font.BOLD, 14));
-            fm = g.getFontMetrics();
-            int priceX = (composite.getWidth() - fm.stringWidth(priceLabel)) / 2;
-            g.drawString(priceLabel, priceX, barcodeImg.getHeight() + 34);
-            g.dispose();
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(16384);
-            ImageIO.write(composite, "PNG", baos);
-            return baos.toByteArray();
-        } catch (WriterException | IOException ex) {
-            throw new BarcodeGenerationException(
-                    "Failed to generate captioned barcode for: " + value, ex);
-        }
-    }
-
-    /**
-     * Convert PNG bytes to a JavaFX Image for direct use in an ImageView.
-     */
-    public Image toJavaFxImage(byte[] pngBytes) {
-        try {
-            BufferedImage buffered = ImageIO.read(new java.io.ByteArrayInputStream(pngBytes));
-            return SwingFXUtils.toFXImage(buffered, null);
-        } catch (IOException ex) {
-            throw new BarcodeGenerationException("Failed to convert PNG to JavaFX Image", ex);
         }
     }
 

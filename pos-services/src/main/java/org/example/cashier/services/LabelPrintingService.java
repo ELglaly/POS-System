@@ -14,10 +14,6 @@ import java.util.List;
  */
 public interface LabelPrintingService {
 
-    /**
-     * Submit a print job to the named printer (or system default if null/blank).
-     * Runs asynchronously via {@code @Async} — returns the created job record.
-     */
     PrintJobDTO print(BarcodeGenerationRequestDTO request, String printerName);
 
     /**

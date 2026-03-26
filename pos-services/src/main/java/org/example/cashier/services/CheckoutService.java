@@ -13,10 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
-/**
- * Atomic checkout: validates stock, reduces inventory, persists the Transaction.
- * Rolls back everything if any step fails.
- */
 @Service
 @RequiredArgsConstructor
 public class CheckoutService {

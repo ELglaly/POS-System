@@ -26,10 +26,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * Authenticate by username and password.
-     * Returns the user on success, empty on failure.
-     */
     @Transactional
     public Optional<User> login(String username, String password) {
         Optional<User> opt = userRepository.findByUsernameAndActiveTrue(username);
@@ -41,10 +37,6 @@ public class AuthService {
         return validateAndRecord(user, passwordEncoder.matches(password, user.getPasswordHash()));
     }
 
-    /**
-     * Authenticate by barcode PIN (scan-to-login).
-     * No password required — the physical barcode IS the credential.
-     */
     @Transactional
     public Optional<User> loginWithBarcode(String barcodePin) {
         Optional<User> opt = userRepository.findByBarcodePinAndActiveTrue(barcodePin);

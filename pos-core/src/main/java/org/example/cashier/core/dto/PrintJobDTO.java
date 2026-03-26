@@ -7,9 +7,7 @@ import org.example.cashier.core.enums.LabelTemplate;
 
 import java.time.LocalDateTime;
 
-/**
- * Print job record DTO for the barcode screen history table.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

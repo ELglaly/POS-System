@@ -12,10 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Admin-only CRUD operations for user accounts.
- * Password hashing is always done here — callers pass raw passwords.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,9 +25,6 @@ public class UserManagementService {
         return userRepository.findAllByActiveTrueOrderByUsername();
     }
 
-    /**
-     * Create a new user. Throws IllegalArgumentException if username is taken.
-     */
     @Transactional
     public User createUser(String username, String fullName, String rawPassword, UserRole role) {
         if (username == null || username.isBlank())
@@ -54,11 +47,6 @@ public class UserManagementService {
                 saved.getUsername(), saved.getRole(), saved.getBarcodePin());
         return saved;
     }
-
-    /**
-     * Update an existing user's username, full name, role, and optionally password.
-     * Pass rawPassword as null or blank to leave the password unchanged.
-     */
     @Transactional
     public User updateUser(Long id, String username, String fullName,
                            String rawPassword, UserRole role) {
@@ -90,9 +78,6 @@ public class UserManagementService {
         return saved;
     }
 
-    /**
-     * Soft-delete: marks the user inactive. The record is kept for audit purposes.
-     */
     @Transactional
     public void deleteUser(Long id) {
         userRepository.findById(id).ifPresent(u -> {
@@ -101,10 +86,6 @@ public class UserManagementService {
             log.info("Deactivated user {}", u.getUsername());
         });
     }
-
-    /**
-     * Generate a staff badge PNG: CODE128 of the barcodePin + user name.
-     */
     public byte[] getUserBarcodeLabel(User user) {
         String displayName = (user.getFullName() != null && !user.getFullName().isBlank())
                 ? user.getFullName() : user.getUsername();

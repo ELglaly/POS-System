@@ -16,7 +16,6 @@ public class CashierProductService {
     private final ProductRepository productRepository;
     private final ZXingBarcodeEngine barcodeEngine;
 
-    /** Primary scan lookup — finds active product by SKU. */
     public Optional<Product> findBySku(String sku) {
         return productRepository.findBySkuAndActiveTrue(sku);
     }
@@ -52,11 +51,6 @@ public class CashierProductService {
         } while (productRepository.findBySkuAndActiveTrue(sku).isPresent());
         return sku;
     }
-
-    /**
-     * Returns a product label PNG: CODE128 barcode of the SKU with name, SKU text, and price.
-     * The label is generated on-the-fly from the current product state — never persisted.
-     */
     public byte[] getBarcodeLabel(Product product) {
         return barcodeEngine.generateProductLabel(product.getSku(), product.getName());
     }

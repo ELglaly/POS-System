@@ -43,13 +43,6 @@ public class ReceiptService {
         }
     }
 
-    public String[] listPrinters() {
-        PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
-        String[] names = new String[services.length];
-        for (int i = 0; i < services.length; i++) names[i] = services[i].getName();
-        return names;
-    }
-
     private PrintService resolvePrinter(String name) {
         PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
         if (name == null || name.isBlank()) {

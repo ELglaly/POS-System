@@ -19,7 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByActiveTrueOrderByUsername();
 
-    List<User> findByRoleAndActiveTrue(UserRole role);
-
     long countByActiveTrue();
 }

@@ -13,20 +13,6 @@ import org.example.cashier.core.dto.BarcodeDTO;
 
 import java.util.function.Consumer;
 
-/**
- * Reusable custom JavaFX control that renders a single barcode.
- *
- * Layout:
- * ┌─────────────────────────────────┐
- * │  [barcode image 300x120px]      │
- * │  Product Name (truncated)       │
- * │  $Price  |  barcode value       │
- * │  [Print] [Download PNG] [Copy]  │
- * └─────────────────────────────────┘
- *
- * Responds to hover: scale 1.0 → 1.02, deeper drop shadow.
- * CSS class: .barcode-widget
- */
 public class BarcodeWidget extends VBox {
 
     private final ObjectProperty<BarcodeDTO> barcodeProperty = new SimpleObjectProperty<>();
@@ -107,24 +93,8 @@ public class BarcodeWidget extends VBox {
     }
 
     // ── Public API ────────────────────────────────────────────────────────────
-
-    public ObjectProperty<BarcodeDTO> barcodeProperty()    { return barcodeProperty; }
-    public ObjectProperty<Image>      imageProperty()       { return imageProperty; }
-
     public void setBarcode(BarcodeDTO dto)   { barcodeProperty.set(dto); }
     public BarcodeDTO getBarcode()           { return barcodeProperty.get(); }
-
-    public void setBarcodeImage(Image image) { imageProperty.set(image); }
-
-    public void setOnPrint(Consumer<BarcodeDTO> handler) {
-        this.onPrint = handler;
-        printButton.setOnAction(e -> { if (onPrint != null && getBarcode() != null) onPrint.accept(getBarcode()); });
-    }
-
-    public void setOnDownload(Consumer<BarcodeDTO> handler) {
-        this.onDownload = handler;
-        downloadButton.setOnAction(e -> { if (onDownload != null && getBarcode() != null) onDownload.accept(getBarcode()); });
-    }
 
     public void clearDisplay() {
         imageView.setImage(null);

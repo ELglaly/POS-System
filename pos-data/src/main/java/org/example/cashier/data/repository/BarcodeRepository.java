@@ -16,13 +16,7 @@ public interface BarcodeRepository extends JpaRepository<Barcode, Long> {
 
     Optional<Barcode> findByBarcodeValueAndActiveTrue(String barcodeValue);
 
-    /** All active barcodes for a specific product. */
     List<Barcode> findByProductIdAndActiveTrueOrderByGeneratedAtDesc(Long productId);
-
-    /** Active barcode of a specific type for a product — should be at most one. */
-    Optional<Barcode> findByProductIdAndBarcodeTypeAndActiveTrue(Long productId, BarcodeType type);
-
-    /** Deactivate all barcodes of a given type for a product (before regenerating). */
     @Modifying
     @Query("""
            UPDATE Barcode b SET b.active = false
@@ -32,7 +26,4 @@ public interface BarcodeRepository extends JpaRepository<Barcode, Long> {
                                      @Param("type") BarcodeType type);
 
     boolean existsByBarcodeValue(String barcodeValue);
-
-    /** Full print history lookup — all barcodes for a product regardless of status. */
-    List<Barcode> findByProductIdOrderByGeneratedAtDesc(Long productId);
 }

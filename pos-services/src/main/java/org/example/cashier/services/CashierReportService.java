@@ -32,18 +32,12 @@ public class CashierReportService {
                 to.plusDays(1).atStartOfDay());
     }
 
-    /** All-time top-N products by quantity sold: [productName, totalQty]. */
     public List<Object[]> getTopProducts(int limit) {
         return transactionRepository.findTopProducts(PageRequest.of(0, limit));
     }
 
     // ── Analytics ──────────────────────────────────────────────────────────
 
-    /**
-     * Summary KPIs for a date range.
-     * Returns a {@link RangeSummary} with totalRevenue, txCount, avgOrderValue,
-     * itemsSold, and totalDiscount.
-     */
     public RangeSummary getRangeSummary(LocalDate from, LocalDate to) {
         var start = from.atStartOfDay();
         var end   = to.plusDays(1).atStartOfDay();
@@ -64,10 +58,6 @@ public class CashierReportService {
         return new RangeSummary(revenue, txCount, avg, itemsSold, discount);
     }
 
-    /**
-     * Top-N products by revenue in a date range.
-     * Returns rows of [productName (String), qty (Long), revenue (BigDecimal)].
-     */
     public List<Object[]> getTopProductsByRevenue(int limit, LocalDate from, LocalDate to) {
         return transactionRepository.findTopProductsByRevenue(
                 from.atStartOfDay(),
@@ -75,10 +65,6 @@ public class CashierReportService {
                 PageRequest.of(0, limit));
     }
 
-    /**
-     * Payment method breakdown for a date range.
-     * Returns rows of [paymentMethod (String), count (Long), total (BigDecimal)].
-     */
     public List<Object[]> getPaymentBreakdown(LocalDate from, LocalDate to) {
         return transactionRepository.getPaymentBreakdown(
                 from.atStartOfDay(),
