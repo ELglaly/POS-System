@@ -12,10 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-/**
- * Handles username/password and barcode PIN authentication.
- * Locks accounts after 5 consecutive failures for 15 minutes.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j

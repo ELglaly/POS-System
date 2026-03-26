@@ -37,11 +37,6 @@ public class CashierProductService implements ProductService {
         productRepository.deleteById(productId);
     }
 
-    /**
-     * Generate a unique SKU.
-     * Format: P-XXXXXX where X is a random alphanumeric character.
-     * Retries until the SKU does not conflict with an existing one.
-     */
     public String generateSku() {
         String sku;
         do {

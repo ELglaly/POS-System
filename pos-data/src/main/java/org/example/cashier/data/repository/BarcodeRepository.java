@@ -14,8 +14,6 @@ import java.util.Optional;
 @Repository
 public interface BarcodeRepository extends JpaRepository<Barcode, Long> {
 
-    Optional<Barcode> findByBarcodeValueAndActiveTrue(String barcodeValue);
-
     List<Barcode> findByProductIdAndActiveTrueOrderByGeneratedAtDesc(Long productId);
     @Modifying
     @Query("""

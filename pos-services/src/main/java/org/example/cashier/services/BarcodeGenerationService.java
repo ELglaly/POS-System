@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface BarcodeGenerationService {
 
-
     BarcodeDTO generate(BarcodeGenerationRequestDTO request);
 
     List<BarcodeDTO> findActiveByProduct(Long productId);

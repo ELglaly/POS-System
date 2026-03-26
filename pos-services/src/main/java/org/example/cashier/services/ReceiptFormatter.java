@@ -10,9 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Formats a Transaction as lines of monospaced text for a 48-column thermal printer.
- */
 @Component
 public class ReceiptFormatter {
 

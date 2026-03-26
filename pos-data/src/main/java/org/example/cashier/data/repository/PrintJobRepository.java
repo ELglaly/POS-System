@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface PrintJobRepository extends JpaRepository<PrintJob, Long> {
-
     List<PrintJob> findTop50ByOrderByCreatedAtDesc();
     List<PrintJob> findByProductIdOrderByCreatedAtDesc(Long productId);
 }

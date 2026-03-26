@@ -17,27 +17,10 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Arrays;
 
-/**
- * Sends label print jobs to ESC/POS thermal printers via escpos-coffee 4.x.
- *
- * ESC/POS Coffee 4.x API notes:
- *   - Style is created with {@code new Style()} — not via escPos.getStyle()
- *   - Image printing: {@code escPos.write(imageWrapper, escPosImage)}
- *   - {@code Graphics} class no longer exists; image writing is on EscPos directly
- */
 @Component
 @Slf4j
 public class EscPosPrinterAdapter {
 
-    /**
-     * Print one or more label copies to the specified printer.
-     *
-     * @param imagePng    raw PNG bytes of the pre-rendered barcode image
-     * @param product     product metadata for text fields on the label
-     * @param template    label layout template
-     * @param copies      number of physical copies
-     * @param printerName target printer name; null = system default
-     */
     public void printLabel(byte[] imagePng,
                            Product product,
                            LabelTemplate template,
@@ -121,10 +104,6 @@ public class EscPosPrinterAdapter {
         return out.toByteArray();
     }
 
-    /**
-     * Send raw bytes using DocFlavor.BYTE_ARRAY.AUTOSENSE, bypassing the OS
-     * print renderer so the ESC/POS command stream reaches the printer intact.
-     */
     private void sendRawBytes(byte[] data, PrintService service) throws IOException {
         DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
         Doc doc = new SimpleDoc(data, flavor, null);

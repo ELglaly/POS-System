@@ -20,19 +20,7 @@ import java.nio.file.Path;
 @Slf4j
 public class PdfLabelExporter {
 
-    /** iText points per millimetre (1 point = 1/72 inch; 1 inch = 25.4mm). */
     private static final float PT_PER_MM = 72f / 25.4f;
-
-    /**
-     * Export barcode label(s) to a PDF file.
-     *
-     * @param imagePng   raw PNG bytes of the pre-rendered barcode image
-     * @param product    product metadata for text fields
-     * @param template   label template defining page size
-     * @param copies     number of label pages to include in the PDF
-     * @param outputPath destination file path
-     * @return the resolved output path (same as input)
-     */
     public Path export(byte[] imagePng,
                        Product product,
                        LabelTemplate template,

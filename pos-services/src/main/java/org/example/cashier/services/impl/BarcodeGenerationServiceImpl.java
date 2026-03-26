@@ -8,7 +8,6 @@ import org.example.cashier.core.dto.BarcodeGenerationRequestDTO;
 import org.example.cashier.core.entity.Barcode;
 import org.example.cashier.core.entity.Product;
 import org.example.cashier.core.enums.BarcodeType;
-import org.example.cashier.core.exception.BarcodeGenerationException;
 import org.example.cashier.core.exception.ProductNotFoundException;
 import org.example.cashier.core.mapper.BarcodeMapper;
 import org.example.cashier.data.repository.BarcodeRepository;
@@ -19,10 +18,7 @@ import org.example.cashier.services.event.BarcodeGeneratedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -111,11 +107,9 @@ public class BarcodeGenerationServiceImpl implements BarcodeGenerationService {
 
     private String buildEan13Value(Product product) {
         long categoryHash = product.getCategory() != null
-                ? Math.abs(product.getCategory().getName().hashCode()) % 1_000_000L
-                : 0L;
-        String base = String.format("%01d%06d%05d",
+                ? Math.abs(product.getCategory().getName().hashCode()) % 1_000_000L : 0L;
+        String candidate = String.format("%01d%06d%05d",
                 0, categoryHash, product.getId() % 100_000L);
-        String candidate = base;
         int suffix = 0;
         while (barcodeRepository.existsByBarcodeValue(candidate)) {
             suffix++;
@@ -130,7 +124,7 @@ public class BarcodeGenerationServiceImpl implements BarcodeGenerationService {
         long id = productId;
         int multiplier = 1;
         while (id > 0) {
-            sum += (id % 10) * multiplier;
+            sum += (int) ((id % 10) * multiplier);
             id /= 10;
             multiplier = (multiplier == 1) ? 3 : 1;
         }
