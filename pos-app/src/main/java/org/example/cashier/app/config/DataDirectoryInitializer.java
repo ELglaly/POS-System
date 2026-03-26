@@ -10,19 +10,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * Ensures the application data directory (~/.cashier-pos/) exists before
- * Hikari tries to open the SQLite file.  Runs once at Spring context startup
- * before any DataSource bean is initialised.
- */
+
 @Configuration
 @Slf4j
 public class DataDirectoryInitializer {
-
-    /**
-     * The JDBC URL from application.properties is parsed to extract the directory.
-     * Fallback: always ensure ~/.cashier-pos/ exists.
-     */
     @PostConstruct
     public void ensureDataDirectory() {
         Path dataDir = Path.of(System.getProperty("user.home"), ".cashier-pos");

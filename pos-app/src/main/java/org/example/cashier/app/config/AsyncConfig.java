@@ -6,14 +6,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
-
-/**
- * Async configuration.
- *
- * "printTaskExecutor" — dedicated pool for label print jobs.
- * Kept small (max 4 threads) because thermal printers queue internally;
- * flooding the printer with threads causes garbled output.
- */
 @Configuration
 @EnableAsync
 public class AsyncConfig {

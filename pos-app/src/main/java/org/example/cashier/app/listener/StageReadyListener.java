@@ -8,11 +8,6 @@ import org.example.cashier.ui.StageManager;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-/**
- * Listens for the StageReadyEvent published by PosApplication.start() and
- * delegates screen loading to StageManager.
- * Always starts at the login screen — the cashier screen is shown after authentication.
- */
 @Component
 @RequiredArgsConstructor
 @Slf4j

@@ -10,10 +10,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-/**
- * Seeds default users on first launch (when the users table is empty).
- * Runs after the Spring context and JPA schema are fully initialised.
- */
 @Component
 @RequiredArgsConstructor
 @Slf4j
