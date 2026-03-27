@@ -4,9 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import lombok.RequiredArgsConstructor;
 import org.example.cashier.core.entity.Transaction;
+import org.example.cashier.core.entity.Transaction.TransactionStatus;
 import org.example.cashier.core.entity.TransactionItem;
 import org.example.cashier.services.ReportService;
 import org.example.cashier.services.ReportService.RangeSummary;
@@ -22,7 +24,9 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -51,14 +55,14 @@ public class ReportsController implements Initializable {
     @FXML private TableColumn<Transaction,String> colTxMethod;
 
     // ── Items detail table ────────────────────────────────────────────────
-    @FXML private Label                              lblItemsHeader;
-    @FXML private TableView<TransactionItem>         itemsTable;
+    @FXML private Label                               lblItemsHeader;
+    @FXML private TableView<TransactionItem>          itemsTable;
     @FXML private TableColumn<TransactionItem,String> colItemName;
     @FXML private TableColumn<TransactionItem,String> colItemQty;
     @FXML private TableColumn<TransactionItem,String> colItemUnitPrice;
     @FXML private TableColumn<TransactionItem,String> colItemSubtotal;
 
-    // ── Analytics ─────────────────────────────────────────────────────────
+    // ── Analytics tables ──────────────────────────────────────────────────
     @FXML private TableView<Object[]>          topTable;
     @FXML private TableColumn<Object[],String> colTopName;
     @FXML private TableColumn<Object[],String> colTopQty;
@@ -69,12 +73,19 @@ public class ReportsController implements Initializable {
     @FXML private Label lblCardCount;
     @FXML private Label lblCardTotal;
 
+    // ── Charts ────────────────────────────────────────────────────────────
+    @FXML private LineChart<String, Number>  revenueChart;
+    @FXML private CategoryAxis               revenueXAxis;
+    @FXML private NumberAxis                 revenueYAxis;
+    @FXML private BarChart<String, Number>   topProductsChart;
+    @FXML private PieChart                   paymentPieChart;
+
     private final ReportService reportService;
-    private final StageManager         stageManager;
+    private final StageManager  stageManager;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        dateFrom.setValue(LocalDate.now().withDayOfMonth(1));   // first of current month
+        dateFrom.setValue(LocalDate.now().withDayOfMonth(1));
         dateTo.setValue(LocalDate.now());
 
         setupTransactionTable();
@@ -107,7 +118,6 @@ public class ReportsController implements Initializable {
         colTxMethod.setCellValueFactory(c ->
                 new SimpleStringProperty(c.getValue().getPaymentMethod().name()));
 
-        // When a transaction is selected, populate the items detail table
         txTable.getSelectionModel().selectedItemProperty().addListener(
                 (obs, old, tx) -> showTransactionItems(tx));
     }
@@ -163,7 +173,13 @@ public class ReportsController implements Initializable {
         topTable.setItems(FXCollections.observableArrayList(top));
 
         // Payment breakdown
-        loadPaymentBreakdown(reportService.getPaymentBreakdown(from, to));
+        List<Object[]> breakdown = reportService.getPaymentBreakdown(from, to);
+        loadPaymentBreakdown(breakdown);
+
+        // Charts
+        populateRevenueChart(history);
+        populateTopProductsChart(top);
+        populatePaymentPieChart(breakdown);
     }
 
     private void showTransactionItems(Transaction tx) {
@@ -179,13 +195,12 @@ public class ReportsController implements Initializable {
     }
 
     private void loadPaymentBreakdown(List<Object[]> rows) {
-        // Reset
         lblCashCount.setText("0");  lblCashTotal.setText("0.00");
         lblCardCount.setText("0");  lblCardTotal.setText("0.00");
 
         for (Object[] row : rows) {
-            String method = row[0].toString();
-            long   count  = ((Number) row[1]).longValue();
+            String method    = row[0].toString();
+            long   count     = ((Number) row[1]).longValue();
             BigDecimal total = (BigDecimal) row[2];
             if ("CASH".equals(method)) {
                 lblCashCount.setText(String.valueOf(count));
@@ -194,6 +209,57 @@ public class ReportsController implements Initializable {
                 lblCardCount.setText(String.valueOf(count));
                 lblCardTotal.setText(CurrencyFormatter.format(total));
             }
+        }
+    }
+
+    // ── Chart population ──────────────────────────────────────────────────
+
+    private void populateRevenueChart(List<Transaction> history) {
+        revenueChart.getData().clear();
+
+        // Group completed transactions by calendar day (sorted)
+        Map<LocalDate, BigDecimal> daily = new TreeMap<>();
+        for (Transaction tx : history) {
+            if (tx.getStatus() == TransactionStatus.COMPLETED && tx.getTotal() != null) {
+                LocalDate day = tx.getCreatedAt().toLocalDate();
+                daily.merge(day, tx.getTotal(), BigDecimal::add);
+            }
+        }
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Revenue");
+        for (Map.Entry<LocalDate, BigDecimal> e : daily.entrySet()) {
+            series.getData().add(
+                    new XYChart.Data<>(e.getKey().toString(), e.getValue().doubleValue()));
+        }
+        revenueChart.getData().add(series);
+    }
+
+    private void populateTopProductsChart(List<Object[]> top) {
+        topProductsChart.getData().clear();
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Revenue");
+        int limit = Math.min(top.size(), 5);
+        for (int i = 0; i < limit; i++) {
+            Object[] row    = top.get(i);
+            String   name   = (String) row[0];
+            if (name.length() > 14) name = name.substring(0, 13) + "…";
+            BigDecimal rev  = (BigDecimal) row[2];
+            series.getData().add(new XYChart.Data<>(name, rev.doubleValue()));
+        }
+        topProductsChart.getData().add(series);
+    }
+
+    private void populatePaymentPieChart(List<Object[]> breakdown) {
+        paymentPieChart.getData().clear();
+
+        for (Object[] row : breakdown) {
+            String     method = row[0].toString();
+            long       count  = ((Number) row[1]).longValue();
+            BigDecimal total  = (BigDecimal) row[2];
+            String     label  = method + " (" + count + " tx)";
+            paymentPieChart.getData().add(new PieChart.Data(label, total.doubleValue()));
         }
     }
 
