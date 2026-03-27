@@ -1,4 +1,3 @@
-# POS Pro — Point of Sale System
 
 A desktop Point-of-Sale application built with **Spring Boot 3** and **JavaFX 17**, backed by a local **SQLite** database. Designed for single-register retail environments — no server or internet connection required.
 
@@ -30,10 +29,16 @@ A desktop Point-of-Sale application built with **Spring Boot 3** and **JavaFX 17
 - Change calculation for cash payments
 - **Operator display** showing the logged-in cashier's name
 
+<img width="1916" height="994" alt="image" src="https://github.com/user-attachments/assets/5809ecb1-687f-4f32-b30a-6a59359e4c28" />
+
 ### Checkout & Receipt
 - Stock is deducted automatically on checkout
 - Formatted receipt printed to a configured thermal printer
 - Receipt includes: shop header, itemised list, subtotal, discount, total, payment details
+
+<img width="655" height="734" alt="image" src="https://github.com/user-attachments/assets/6bbfff53-9d6b-4f8c-bd46-1a0563451f67" />
+
+<img width="669" height="757" alt="image" src="https://github.com/user-attachments/assets/63c657b8-5d58-40f0-8f3d-94f96f45f7c9" />
 
 ### Product Manager *(Admin / Manager)*
 - Full **CRUD** for products — name, price, stock, description
@@ -42,12 +47,16 @@ A desktop Point-of-Sale application built with **Spring Boot 3** and **JavaFX 17
 - **Print barcode label** directly to any system printer
 - Search by name or SKU
 
+<img width="1919" height="986" alt="image" src="https://github.com/user-attachments/assets/508dd4e5-33ab-450e-8f8c-e8c49d36b288" />
+
 ### User Management *(Admin only)*
 - Create, edit, and soft-delete user accounts
 - Roles: **Admin**, **Manager**, **Cashier**, **Inventory Clerk**
 - Password update with confirmation
 - **Staff badge barcode** (CODE128 of the employee's unique PIN)
 - Print staff badges directly from the app
+
+<img width="1916" height="988" alt="image" src="https://github.com/user-attachments/assets/51fd3dbb-9052-4d0e-9eae-fad104394316" />
 
 ### Reports & Analytics *(Admin / Manager)*
 - Date-range picker (defaults to current month)
@@ -57,11 +66,16 @@ A desktop Point-of-Sale application built with **Spring Boot 3** and **JavaFX 17
 - **Top 10 products by revenue** (scoped to the selected date range)
 - **Payment breakdown**: Cash vs Card — count and total for each
 
+  <img width="1919" height="986" alt="image" src="https://github.com/user-attachments/assets/8bfe8288-d72a-44d1-844d-0d41511625f3" />
+
+
 ### Authentication
 - Username + BCrypt password login
 - **Barcode PIN login** — scan the staff badge to log in instantly
 - Account lockout after **5 failed attempts** (unlocks after 15 minutes)
 - Session cleared on logout
+  
+  <img width="617" height="795" alt="image" src="https://github.com/user-attachments/assets/9c361a80-353f-4c11-b822-0eeefb587dcd" />
 
 ### Navigation
 - Smooth **fade transitions** (120 ms out → 180 ms in) between all screens
