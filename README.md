@@ -67,7 +67,8 @@ A desktop Point-of-Sale application built with **Spring Boot 3** and **JavaFX 17
 - **Payment breakdown**: Cash vs Card — count and total for each
 
   <img width="1919" height="986" alt="image" src="https://github.com/user-attachments/assets/8bfe8288-d72a-44d1-844d-0d41511625f3" />
-
+  
+  <img width="1894" height="878" alt="image" src="https://github.com/user-attachments/assets/38d86952-9857-4c9b-b3c4-ee0c653951f0" />
 
 ### Authentication
 - Username + BCrypt password login
